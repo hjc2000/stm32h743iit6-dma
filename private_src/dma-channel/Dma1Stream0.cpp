@@ -1,6 +1,5 @@
 #include "Dma1Stream0.h"
 #include "DmaOptions.h"
-#include "LinkDma.h"
 
 std::string bsp::Dma1Stream0::Name() const
 {
@@ -20,5 +19,5 @@ void bsp::Dma1Stream0::Open(bsp::IDmaOptions const &options, void *parent)
     _dma_handle.Instance = DMA1_Stream0;
     _dma_handle.Init = static_cast<bsp::DmaOptions const &>(options);
     HAL_DMA_Init(&_dma_handle);
-    bsp::LinkDmaToParent(_dma_handle, parent);
+    LinkDmaToParent(parent);
 }
