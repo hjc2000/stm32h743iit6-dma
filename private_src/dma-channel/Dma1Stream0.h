@@ -12,30 +12,7 @@ namespace bsp
         bool _is_open = false;
 
     public:
-        static Dma1Stream0 &Instance()
-        {
-            class Getter : public base::SingletonGetter<Dma1Stream0>
-            {
-            public:
-                std::unique_ptr<Dma1Stream0> Create() override
-                {
-                    return std::unique_ptr<Dma1Stream0>{new Dma1Stream0{}};
-                }
-
-                void Lock() override
-                {
-                    DI_InterruptSwitch().DisableGlobalInterrupt();
-                }
-
-                void Unlock() override
-                {
-                    DI_InterruptSwitch().EnableGlobalInterrupt();
-                }
-            };
-
-            Getter o;
-            return o.Instance();
-        }
+        static Dma1Stream0 &Instance();
 
         std::string Name() const override;
         void Open(bsp::IDmaOptions const &options, void *parent) override;
