@@ -1,7 +1,6 @@
 #pragma once
 #include <bsp-interface/dma/IDmaChannel.h>
 #include <hal.h>
-#include <stdexcept>
 
 namespace bsp
 {
@@ -24,25 +23,6 @@ namespace bsp
             return __HAL_DMA_GET_COUNTER(&_dma_handle);
         }
 
-        void LinkDmaToParent(void *parent)
-        {
-            switch (_dma_handle.Init.Request)
-            {
-            case DMA_REQUEST_USART1_TX:
-                {
-                    LinkDmaToUartTx(*static_cast<UART_HandleTypeDef *>(parent));
-                    break;
-                }
-            case DMA_REQUEST_USART1_RX:
-                {
-                    LinkDmaToUartRx(*static_cast<UART_HandleTypeDef *>(parent));
-                    break;
-                }
-            default:
-                {
-                    throw std::runtime_error{"不支持的请求"};
-                }
-            }
-        }
+        void LinkDmaToParent(void *parent);
     };
 } // namespace bsp
