@@ -23,6 +23,8 @@ namespace bsp
             return __HAL_DMA_GET_COUNTER(&_dma_handle);
         }
 
+        /// @brief 将 DMA 连接到父设备。
+        /// @param parent
         void LinkDmaToParent(void *parent);
     };
 } // namespace bsp
