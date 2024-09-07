@@ -1,5 +1,5 @@
 #include "DmaOptions.h"
-#include <base/SingletonGetter.h>
+#include <base/di/SingletonGetter.h>
 #include <bsp-interface/di/interrupt.h>
 
 std::map<std::string, uint32_t> const &bsp::DmaOptions::RequestMap()
