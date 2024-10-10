@@ -12,50 +12,52 @@ std::shared_ptr<bsp::IDmaOptions> DICreate_DmaOptions()
     return std::shared_ptr<bsp::IDmaOptions>{new bsp::DmaOptions{}};
 }
 
-base::IDictionary<std::string, bsp::IDmaChannel *> const &DI_DmaChannelCollection()
+namespace
 {
     class Initializer
     {
     private:
-        Initializer()
-        {
-            Add(&bsp::Dma1Stream0::Instance());
-            Add(&bsp::Dma1Stream1::Instance());
-        }
+        bsp::Dma1Stream0 _dma1_stream0;
+        bsp::Dma1Stream1 _dma1_stream1;
 
         void Add(bsp::IDmaChannel *o)
         {
-            _collection.Add(o->Name(), o);
+            _dic.Add(o->Name(), o);
         }
 
     public:
-        base::Dictionary<std::string, bsp::IDmaChannel *> _collection;
-
-        static Initializer &Instance()
+        Initializer()
         {
-            class Getter : public base::SingletonGetter<Initializer>
-            {
-            public:
-                std::unique_ptr<Initializer> Create() override
-                {
-                    return std::unique_ptr<Initializer>{new Initializer{}};
-                }
-
-                void Lock() override
-                {
-                    DI_InterruptSwitch().DisableGlobalInterrupt();
-                }
-
-                void Unlock() override
-                {
-                    DI_InterruptSwitch().EnableGlobalInterrupt();
-                }
-            };
-
-            Getter g;
-            return g.Instance();
+            Add(&_dma1_stream0);
+            Add(&_dma1_stream1);
         }
+
+        base::Dictionary<std::string, bsp::IDmaChannel *> _dic;
     };
 
-    return Initializer::Instance()._collection;
+    class Getter :
+        public base::SingletonGetter<Initializer>
+    {
+    public:
+        std::unique_ptr<Initializer> Create() override
+        {
+            return std::unique_ptr<Initializer>{new Initializer{}};
+        }
+
+        void Lock() override
+        {
+            DI_InterruptSwitch().DisableGlobalInterrupt();
+        }
+
+        void Unlock() override
+        {
+            DI_InterruptSwitch().EnableGlobalInterrupt();
+        }
+    };
+} // namespace
+
+base::IDictionary<std::string, bsp::IDmaChannel *> const &DI_DmaChannelCollection()
+{
+    Getter g;
+    return g.Instance()._dic;
 }
