@@ -17,9 +17,6 @@ namespace
     class Initializer
     {
     private:
-        bsp::Dma1Stream0 _dma1_stream0;
-        bsp::Dma1Stream1 _dma1_stream1;
-
         void Add(bsp::IDmaChannel *o)
         {
             _dic.Add(o->Name(), o);
@@ -28,8 +25,8 @@ namespace
     public:
         Initializer()
         {
-            Add(&_dma1_stream0);
-            Add(&_dma1_stream1);
+            Add(&bsp::Dma1Stream0::Instance());
+            Add(&bsp::Dma1Stream1::Instance());
         }
 
         base::Dictionary<std::string, bsp::IDmaChannel *> _dic;

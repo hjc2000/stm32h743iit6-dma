@@ -1,6 +1,32 @@
 #include "Dma1Stream0.h"
 #include "DmaOptions.h"
 
+bsp::Dma1Stream0 &bsp::Dma1Stream0::Instance()
+{
+    class Getter :
+        public base::SingletonGetter<bsp::Dma1Stream0>
+    {
+    public:
+        std::unique_ptr<bsp::Dma1Stream0> Create() override
+        {
+            return std::unique_ptr<bsp::Dma1Stream0>{new bsp::Dma1Stream0{}};
+        }
+
+        void Lock() override
+        {
+            DI_InterruptSwitch().DisableGlobalInterrupt();
+        }
+
+        void Unlock() override
+        {
+            DI_InterruptSwitch().EnableGlobalInterrupt();
+        }
+    };
+
+    Getter o;
+    return o.Instance();
+}
+
 std::string bsp::Dma1Stream0::Name() const
 {
     return "dma1_stream0";
