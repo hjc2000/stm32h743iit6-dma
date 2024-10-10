@@ -1,7 +1,7 @@
 #include "Dma1Stream0.h"
 #include "Dma1Stream1.h"
 #include "DmaOptions.h"
-#include <base/container/Collection.h>
+#include <base/container/Dictionary.h>
 #include <base/di/SingletonGetter.h>
 #include <bsp-interface/di/dma.h>
 #include <bsp-interface/di/interrupt.h>
@@ -12,7 +12,7 @@ std::shared_ptr<bsp::IDmaOptions> DICreate_DmaOptions()
     return std::shared_ptr<bsp::IDmaOptions>{new bsp::DmaOptions{}};
 }
 
-base::ICollection<std::string, bsp::IDmaChannel *> const &DI_DmaChannelCollection()
+base::IDictionary<std::string, bsp::IDmaChannel *> const &DI_DmaChannelCollection()
 {
     class Initializer
     {
@@ -25,11 +25,11 @@ base::ICollection<std::string, bsp::IDmaChannel *> const &DI_DmaChannelCollectio
 
         void Add(bsp::IDmaChannel *o)
         {
-            _collection.Put(o->Name(), o);
+            _collection.Add(o->Name(), o);
         }
 
     public:
-        base::Collection<std::string, bsp::IDmaChannel *> _collection;
+        base::Dictionary<std::string, bsp::IDmaChannel *> _collection;
 
         static Initializer &Instance()
         {
