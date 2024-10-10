@@ -1,4 +1,5 @@
 #pragma once
+#include <base/define.h>
 #include <bsp-interface/dma/IDmaChannel.h>
 #include <hal.h>
 

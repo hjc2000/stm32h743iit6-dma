@@ -14,7 +14,7 @@ namespace bsp
         bool _is_open = false;
 
     public:
-        static Dma1Stream1 &Instance();
+        static_function Dma1Stream1 &Instance();
 
         std::string Name() const override;
         void Open(bsp::IDmaOptions const &options, void *parent) override;
